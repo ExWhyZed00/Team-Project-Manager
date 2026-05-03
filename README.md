@@ -1,4 +1,4 @@
-# TaskFlow — Team Task Manager
+# Workly — Team Project Manager
 
 A full-stack collaborative task management web application built with React, Node.js, Express, and MongoDB. Think of it as a simplified Trello/Asana where teams can manage projects and tasks together.
 
@@ -75,7 +75,7 @@ A full-stack collaborative task management web application built with React, Nod
 ## 📁 Project Structure
 
 ```
-TeamTaskManagerAssignment/
+TeamProjectManager/
 │
 ├── frontend/                   # React app
 │   ├── public/
