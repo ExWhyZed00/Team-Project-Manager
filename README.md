@@ -6,8 +6,8 @@ A full-stack collaborative task management web application built with React, Nod
 
 ## 🔗 Live Demo
 
-**Frontend:** `https://your-frontend.up.railway.app`  
-**Backend API:** `https://your-backend.up.railway.app`
+**Frontend:** `https://astonishing-tranquility-production-7c36.up.railway.app`  
+**Backend API:** `https://team-project-manager-production.up.railway.app`
 
 ---
 ## ✨ Features
