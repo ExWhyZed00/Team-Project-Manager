@@ -3,12 +3,12 @@ import { useAuth } from "../context/AuthContext";
 import "./Sidebar.css";
 
 const NAV_ITEMS = [
-  { to: "/dashboard", label: "Dashboard",  icon: "▦" },
-  { to: "/projects",  label: "Projects",   icon: "⊞" },
-  { to: "/tasks",     label: "My Tasks",   icon: "✓" },
+  { to: "/dashboard", label: "Overview",  icon: "◈" },
+  { to: "/projects",  label: "Projects",  icon: "⊟" },
+  { to: "/tasks",     label: "My Tasks",  icon: "◎" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ className }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -22,40 +22,39 @@ export default function Sidebar() {
     : "?";
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar__logo">TaskFlow</div>
+    <aside className={`sidebar ${className || ""}`}>
+      <div className="sidebar__logo">
+        <div className="sidebar__logo-dot" />
+        <span className="sidebar__logo-text">Workly</span>
+      </div>
 
       <nav className="sidebar__nav">
+        <span className="sidebar__section-label">Navigation</span>
         {NAV_ITEMS.map(({ to, label, icon }) => (
           <NavLink
-            key={to}
-            to={to}
+            key={to} to={to}
             className={({ isActive }) =>
               "sidebar__link" + (isActive ? " sidebar__link--active" : "")
             }
           >
-            <span className="sidebar__icon">{icon}</span>
+            <span className="sidebar__link-icon">{icon}</span>
             <span>{label}</span>
           </NavLink>
         ))}
       </nav>
 
       <div className="sidebar__footer">
-        <div className="sidebar__user">
-          <span
-            className="sidebar__avatar"
-            style={{ background: user?.avatar_color || "#6366f1" }}
-          >
-            {initials}
-          </span>
-          <div className="sidebar__user-info">
-            <span className="sidebar__user-name">{user?.name}</span>
-            <span className="sidebar__user-email">{user?.email}</span>
-          </div>
+        <span
+          className="sidebar__avatar"
+          style={{ background: user?.avatar_color || "#e8613c" }}
+        >
+          {initials}
+        </span>
+        <div className="sidebar__user-info">
+          <span className="sidebar__user-name">{user?.name}</span>
+          <span className="sidebar__user-role">Member</span>
         </div>
-        <button className="sidebar__logout" onClick={handleLogout} title="Logout">
-          ⎋
-        </button>
+        <button className="sidebar__logout" onClick={handleLogout}>Exit</button>
       </div>
     </aside>
   );

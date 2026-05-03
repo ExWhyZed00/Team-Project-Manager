@@ -4,7 +4,6 @@ import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
 import "./Login.css";
 
-// Class components can't use hooks directly so we wrap with a function
 function Login(props) {
   const { login } = useAuth();
   const navigate  = useNavigate();
@@ -48,66 +47,57 @@ class LoginClass extends Component {
 
     return (
       <div className="auth-root">
-        {/* Left decorative panel */}
         <div className="auth-panel">
-          <div className="auth-panel__logo">TaskFlow</div>
+          <div className="auth-panel__logo">Workly</div>
           <div className="auth-panel__copy">
-            <h1>Ship work,<br />not chaos.</h1>
-            <p>Coordinate your team's tasks in one place — no spreadsheets, no noise.</p>
+            <h1>Manage work,<br /><span>not meetings.</span></h1>
+            <p>A clean, fast workspace for teams that want to get things done without the noise.</p>
           </div>
-          <div className="auth-panel__grid" aria-hidden="true">
-            {Array.from({ length: 48 }).map((_, i) => (
-              <span key={i} className="grid-dot" />
-            ))}
+          <div className="auth-panel__tags">
+            <span className="auth-panel__tag">Projects</span>
+            <span className="auth-panel__tag">Tasks</span>
+            <span className="auth-panel__tag">Teams</span>
+            <span className="auth-panel__tag">Progress</span>
           </div>
         </div>
 
-        {/* Right form panel */}
         <div className="auth-form-wrap page-enter">
           <div className="auth-form-box">
             <div className="auth-form-header">
-              <h2>Welcome back</h2>
-              <p>Sign in to your workspace</p>
+              <h2>Sign in</h2>
+              <p>Enter your credentials to continue</p>
             </div>
 
-            {error && <div className="auth-error">{error}</div>}
+            {error && <div className="auth-error" style={{ marginBottom: "1rem" }}>{error}</div>}
 
             <form onSubmit={this.handleSubmit} className="auth-form">
               <div className="field">
-                <label htmlFor="email">Email</label>
+                <label>Email address</label>
                 <input
-                  id="email"
-                  type="email"
-                  name="email"
+                  type="email" name="email"
                   placeholder="you@company.com"
                   value={form.email}
                   onChange={this.handleChange}
-                  required
-                  autoComplete="email"
+                  required autoComplete="email"
                 />
               </div>
-
               <div className="field">
-                <label htmlFor="password">Password</label>
+                <label>Password</label>
                 <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="••••••••"
+                  type="password" name="password"
+                  placeholder="Your password"
                   value={form.password}
                   onChange={this.handleChange}
-                  required
-                  autoComplete="current-password"
+                  required autoComplete="current-password"
                 />
               </div>
-
               <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? <span className="spinner" /> : "Sign In"}
+                {loading ? <span className="spinner" /> : "Continue →"}
               </button>
             </form>
 
             <p className="auth-switch">
-              No account? <Link to="/signup">Create one →</Link>
+              New here? <Link to="/signup">Create an account</Link>
             </p>
           </div>
         </div>

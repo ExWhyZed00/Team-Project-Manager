@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
@@ -11,7 +11,6 @@ const COLUMNS = [
   { key: "done",       label: "Done",        dot: "dot-done" },
 ];
 
-// ── TaskCard (no state, keep as function) ─────────────────────
 function TaskCard({ task, isAdmin, onEdit, onDelete }) {
   const overdue = task.due_date && task.status !== "done" && new Date(task.due_date) < new Date();
   return (
@@ -19,28 +18,23 @@ function TaskCard({ task, isAdmin, onEdit, onDelete }) {
       <div className="task-card__top">
         <span className={`priority-badge priority-${task.priority}`}>{task.priority}</span>
         {isAdmin && (
-          <button
-            className="task-card__del"
-            onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
-            title="Delete task"
-          >✕</button>
+          <button className="task-card__del"
+            onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}>✕</button>
         )}
       </div>
       <p className="task-card__title">{task.title}</p>
       {task.description && <p className="task-card__desc">{task.description}</p>}
       <div className="task-card__footer">
         {task.assigned_name && (
-          <span
-            className="task-card__avatar"
-            style={{ background: task.assigned_color || "#6366f1" }}
-            title={task.assigned_name}
-          >
+          <span className="task-card__avatar"
+            style={{ background: task.assigned_color || "#e8613c" }}
+            title={task.assigned_name}>
             {task.assigned_name[0].toUpperCase()}
           </span>
         )}
         {task.due_date && (
           <span className={`task-card__due ${overdue ? "task-card__due--overdue" : ""}`}>
-            {overdue ? "⚠ " : ""}
+            {overdue ? "⚑ " : ""}
             {new Date(task.due_date).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
           </span>
         )}
@@ -49,7 +43,6 @@ function TaskCard({ task, isAdmin, onEdit, onDelete }) {
   );
 }
 
-// ── AddMemberForm class component ─────────────────────────────
 class AddMemberForm extends Component {
   constructor(props) {
     super(props);
@@ -75,19 +68,16 @@ class AddMemberForm extends Component {
     const { email, loading, error } = this.state;
     return (
       <form className="add-member-form" onSubmit={this.handleAdd}>
-        <h4>Add member by email</h4>
+        <h4>Add a team member</h4>
         {error && <div className="auth-error" style={{ marginBottom: "0.75rem" }}>{error}</div>}
         <div style={{ display: "flex", gap: "0.75rem" }}>
           <input
-            type="email"
-            placeholder="colleague@example.com"
-            value={email}
-            onChange={(e) => this.setState({ email: e.target.value })}
-            required
+            type="email" placeholder="colleague@company.com" value={email}
+            onChange={(e) => this.setState({ email: e.target.value })} required
             style={{
-              flex: 1, background: "var(--bg-3)", border: "1px solid var(--border)",
+              flex: 1, background: "white", border: "1.5px solid var(--border)",
               borderRadius: "var(--radius-sm)", color: "var(--text)",
-              padding: "0.65rem 1rem", fontSize: "0.9rem",
+              padding: "0.65rem 0.9rem", fontSize: "0.88rem", fontFamily: "var(--font-body)",
             }}
           />
           <button type="submit" className="btn-accent" disabled={loading}>
@@ -99,7 +89,6 @@ class AddMemberForm extends Component {
   }
 }
 
-// ── Wrapper to inject hooks into class component ──────────────
 function ProjectDetail(props) {
   const { id }   = useParams();
   const { user } = useAuth();
@@ -107,31 +96,22 @@ function ProjectDetail(props) {
   return <ProjectDetailClass id={id} user={user} navigate={navigate} {...props} />;
 }
 
-// ── Main ProjectDetail class component ────────────────────────
 class ProjectDetailClass extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      project:   null,
-      tasks:     [],
-      members:   [],
-      loading:   true,
-      modalTask: null,
-      tab:       "board",
+      project: null, tasks: [], members: [],
+      loading: true, modalTask: null, tab: "board",
     };
     this.load               = this.load.bind(this);
     this.handleDeleteTask   = this.handleDeleteTask.bind(this);
     this.handleRemoveMember = this.handleRemoveMember.bind(this);
   }
 
-  componentDidMount() {
-    this.load();
-  }
+  componentDidMount() { this.load(); }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.id !== this.props.id) {
-      this.load();
-    }
+    if (prevProps.id !== this.props.id) this.load();
   }
 
   async load() {
@@ -141,11 +121,7 @@ class ProjectDetailClass extends Component {
         api.get(`/projects/${this.props.id}/tasks`),
         api.get(`/projects/${this.props.id}/members`),
       ]);
-      this.setState({
-        project: pRes.data,
-        tasks:   tRes.data,
-        members: mRes.data,
-      });
+      this.setState({ project: pRes.data, tasks: tRes.data, members: mRes.data });
     } catch (err) {
       if (err.response?.status === 404) this.props.navigate("/projects");
     } finally {
@@ -157,9 +133,7 @@ class ProjectDetailClass extends Component {
     if (!window.confirm("Delete this task?")) return;
     try {
       await api.delete(`/tasks/${taskId}`);
-      this.setState((prev) => ({
-        tasks: prev.tasks.filter((x) => x.id !== taskId),
-      }));
+      this.setState((prev) => ({ tasks: prev.tasks.filter((x) => x.id !== taskId) }));
     } catch (err) {
       alert(err.response?.data?.message || "Failed to delete task.");
     }
@@ -176,7 +150,7 @@ class ProjectDetailClass extends Component {
   }
 
   render() {
-    const { user, id }                        = this.props;
+    const { user, id } = this.props;
     const { project, tasks, members, loading, modalTask, tab } = this.state;
 
     const isAdmin = members.find(
@@ -191,16 +165,17 @@ class ProjectDetailClass extends Component {
 
     if (loading) return (
       <div style={{ display: "flex", height: "60vh", alignItems: "center", justifyContent: "center" }}>
-        <span className="spinner" style={{ borderTopColor: "var(--accent)", width: 28, height: 28, borderWidth: 3 }} />
+        <span className="spinner" style={{ borderColor: "var(--border)", borderTopColor: "var(--accent)", width: 28, height: 28, borderWidth: 3 }} />
       </div>
     );
 
     return (
       <div className="project-detail page-enter">
-        {/* Header */}
         <div className="pd-header">
           <div className="pd-header__left">
-            <button className="pd-back" onClick={() => this.props.navigate("/projects")}>← Projects</button>
+            <button className="pd-back" onClick={() => this.props.navigate("/projects")}>
+              ← Back to Projects
+            </button>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
                 <div className="pd-color-dot" style={{ background: project?.color }} />
@@ -218,19 +193,15 @@ class ProjectDetailClass extends Component {
           </div>
         </div>
 
-        {/* Tabs */}
         <div className="pd-tabs">
-          <button
-            className={`pd-tab ${tab === "board" ? "active" : ""}`}
-            onClick={() => this.setState({ tab: "board" })}
-          >Board</button>
-          <button
-            className={`pd-tab ${tab === "members" ? "active" : ""}`}
-            onClick={() => this.setState({ tab: "members" })}
-          >Members ({members.length})</button>
+          <button className={`pd-tab ${tab === "board" ? "active" : ""}`}
+            onClick={() => this.setState({ tab: "board" })}>Board</button>
+          <button className={`pd-tab ${tab === "members" ? "active" : ""}`}
+            onClick={() => this.setState({ tab: "members" })}>
+            Team ({members.length})
+          </button>
         </div>
 
-        {/* Board view */}
         {tab === "board" && (
           <div className="kanban">
             {COLUMNS.map((col) => (
@@ -241,15 +212,11 @@ class ProjectDetailClass extends Component {
                   <span className="kanban-col__count">{grouped[col.key].length}</span>
                 </div>
                 <div className="kanban-col__cards">
-                  {grouped[col.key].length === 0 && <div className="kanban-empty">No tasks</div>}
+                  {grouped[col.key].length === 0 && <div className="kanban-empty">No tasks here</div>}
                   {grouped[col.key].map((t) => (
-                    <TaskCard
-                      key={t.id}
-                      task={t}
-                      isAdmin={isAdmin}
+                    <TaskCard key={t.id} task={t} isAdmin={isAdmin}
                       onEdit={(task) => this.setState({ modalTask: task })}
-                      onDelete={this.handleDeleteTask}
-                    />
+                      onDelete={this.handleDeleteTask} />
                   ))}
                 </div>
               </div>
@@ -257,7 +224,6 @@ class ProjectDetailClass extends Component {
           </div>
         )}
 
-        {/* Members tab */}
         {tab === "members" && (
           <div className="pd-members">
             {members.map((m) => (
@@ -281,14 +247,10 @@ class ProjectDetailClass extends Component {
           </div>
         )}
 
-        {/* Task modal */}
         {modalTask !== null && (
           <TaskModal
-            task={modalTask}
-            projectId={id}
-            members={members}
-            isAdmin={isAdmin}
-            currentUser={user}
+            task={modalTask} projectId={id} members={members}
+            isAdmin={isAdmin} currentUser={user}
             onClose={() => this.setState({ modalTask: null })}
             onSaved={() => { this.setState({ modalTask: null }); this.load(); }}
           />

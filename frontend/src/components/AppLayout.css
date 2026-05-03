@@ -1,11 +1,11 @@
 .app-shell {
   display: flex;
   min-height: 100vh;
-  min-width: 100vw;
+  background: var(--bg);
 }
 
 .app-main {
-  margin-left: 220px;
+  margin-left: 230px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,6 @@
   padding: 2rem 2.5rem;
 }
 
-/* ── Loading screen ── */
 .app-loader {
   min-height: 100vh;
   display: flex;
@@ -25,14 +24,22 @@
   justify-content: center;
 }
 
-/* ── Mobile topbar (hidden on desktop) ── */
+.app-loader .spinner {
+  border-top-color: var(--accent);
+  border-color: var(--border);
+  border-top-color: var(--accent);
+  width: 28px;
+  height: 28px;
+  border-width: 3px;
+}
+
 .app-topbar {
   display: none;
   align-items: center;
   gap: 1rem;
-  padding: 0.9rem 1.25rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-2);
+  padding: 0.85rem 1.25rem;
+  background: white;
+  border-bottom: 1.5px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -40,10 +47,10 @@
 
 .topbar-logo {
   font-family: var(--font-display);
-  font-weight: 800;
-  color: var(--accent);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--text);
   font-size: 1.1rem;
-  letter-spacing: -0.02em;
 }
 
 .topbar-menu {
@@ -56,7 +63,7 @@
 .sidebar-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.3);
   z-index: 99;
 }
 
